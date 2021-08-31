@@ -47,11 +47,19 @@ class TornadoConnectionContext(BaseConnectionContext):
 
 
 class TornadoSubscriptionServer(BaseSubscriptionServer):
-    def __init__(self, schema, keep_alive=True, loop=None, backend=None, middleware=None):
+    def __init__(
+        self, schema,
+        keep_alive=True,
+        loop=None,
+        backend=None,
+        middleware=None,
+        auth=None
+    ):
         self.loop = loop
         self.backend = backend or None
         self.middleware = middleware
         super().__init__(schema, keep_alive)
+        self.auth = auth
 
     @staticmethod
     def instantiate_middleware(middlewares):
