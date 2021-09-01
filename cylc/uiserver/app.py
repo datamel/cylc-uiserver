@@ -345,8 +345,8 @@ class CylcUIServer(ExtensionApp):
             schema,
             backend=CylcGraphQLBackend(),
             middleware=[
+                IgnoreFieldMiddleware,
                 AuthorizationMiddleware,
-                IgnoreFieldMiddleware
             ],
             auth=self.authobj
         )
@@ -382,7 +382,8 @@ class CylcUIServer(ExtensionApp):
                     'resolvers': self.resolvers,
                     'backend': CylcGraphQLBackend(),
                     'middleware': [
-                        AuthorizationMiddleware, IgnoreFieldMiddleware
+                        AuthorizationMiddleware,
+                        IgnoreFieldMiddleware
                     ],
                     'auth': self.authobj,
                 }
@@ -437,6 +438,8 @@ class CylcUIServer(ExtensionApp):
 
     @classmethod
     def launch_instance(cls, argv=None, **kwargs):
+        import mdb
+        mdb.debug(ui_server=True)
         if argv is None:
             # jupyter server isn't expecting to be launched by a Cylc command
             # this patches some internal logic
