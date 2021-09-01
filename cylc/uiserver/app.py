@@ -344,7 +344,10 @@ class CylcUIServer(ExtensionApp):
         self.subscription_server = TornadoSubscriptionServer(
             schema,
             backend=CylcGraphQLBackend(),
-            middleware=[AuthorizationMiddleware, IgnoreFieldMiddleware],
+            middleware=[
+                AuthorizationMiddleware,
+                IgnoreFieldMiddleware
+            ],
             auth=self.authobj
         )
 

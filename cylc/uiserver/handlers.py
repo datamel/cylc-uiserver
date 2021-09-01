@@ -213,7 +213,6 @@ class UserProfileHandler(CylcAppHandler):
         self.set_header("Content-Type", 'application/json')
 
     @web.authenticated
-    @authorised
     def get(self):
         user_info = self.get_current_user()
 

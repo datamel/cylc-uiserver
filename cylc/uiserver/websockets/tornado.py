@@ -21,6 +21,8 @@ from graphql_ws.constants import (
 
 from typing import Union, Awaitable, Any, List, Tuple, Dict, Optional
 
+from cylc.uiserver.authorise import AuthorizationMiddleware
+
 setup_observable_extension()
 
 NO_MSG_DELAY = 1.0
@@ -58,8 +60,9 @@ class TornadoSubscriptionServer(BaseSubscriptionServer):
         self.loop = loop
         self.backend = backend or None
         self.middleware = middleware
-        super().__init__(schema, keep_alive)
         self.auth = auth
+        self.current_user = None
+        super().__init__(schema, keep_alive)
 
     @staticmethod
     def instantiate_middleware(middlewares):
@@ -80,6 +83,10 @@ class TornadoSubscriptionServer(BaseSubscriptionServer):
             )
         else:
             middleware = self.middleware
+        for mw in self.middleware:
+            if isinstance(mw, AuthorizationMiddleware):
+                mw.current_user = self.current_user['name']
+                mw.auth = self.auth
         return dict(
             params,
             return_promise=True,
