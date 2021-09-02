@@ -21,8 +21,6 @@ from graphql_ws.constants import (
 
 from typing import Union, Awaitable, Any, List, Tuple, Dict, Optional
 
-from cylc.uiserver.authorise import AuthorizationMiddleware
-
 setup_observable_extension()
 
 NO_MSG_DELAY = 1.0

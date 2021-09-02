@@ -353,8 +353,8 @@ class AuthorizationMiddleware:
     def resolve(self, next_, root, info, **args):
         set_auth= set()
         # set_auth.add = id(self.auth)
-        print(f"The set of auth    .............  {set_auth}")
-        set_authmiddleware= set()
+        print(f"The id of auth for {self.current_user} is {id(self)}")
+        print(f"The id of auth.auth for {self.current_user} is {id(self.auth)}")
      #   set_authmiddleware.add = id(self)
       #  print(f"The set of authmiddleware   ..........  {set_authmiddleware}") 
         #print(f"{id(self)}<<<<<<<<<<<<<<<here be the authmiddleware")
