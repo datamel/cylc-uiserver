@@ -278,7 +278,9 @@ class UIServerGraphQLHandler(CylcAppHandler, TornadoGraphQLHandler):
         # Make authorization info available to auth middleware
         for mw in self.middleware:
             if isinstance(mw, AuthorizationMiddleware):
+                print("!!!!!!!!!!!!!!!!!here I am")
                 mw.current_user = current_user['name']
+                print(f"====={mw.current_user}=++++++++++++++++++++")
                 mw.auth = self.auth
         self.executor = executor
         self.root_value = root_value
@@ -328,7 +330,7 @@ class SubscriptionHandler(CylcAppHandler, websocket.WebSocketHandler):
         self.subscription_server = sub_server
         self.resolvers = resolvers
         if sub_server:
-            self.subscription_server.current_user = self.current_user
+            self.subscription_server.current_user = self.get_current_user()
 
     def select_subprotocol(self, subprotocols):
         return GRAPHQL_WS

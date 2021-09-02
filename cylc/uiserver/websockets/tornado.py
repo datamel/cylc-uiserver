@@ -77,6 +77,7 @@ class TornadoSubscriptionServer(BaseSubscriptionServer):
                        self).get_graphql_params(*args, **kwargs)
         # If middleware get instantiated here (optional), they will
         # be local/private to each subscription.
+        print("--------------------------!!")
         if self.middleware is not None:
             middleware = list(
                 self.instantiate_middleware(self.middleware)
@@ -84,8 +85,11 @@ class TornadoSubscriptionServer(BaseSubscriptionServer):
         else:
             middleware = self.middleware
         for mw in self.middleware:
-            if isinstance(mw, AuthorizationMiddleware):
+            if hasattr(mw, "auth"):
+            # if isinstance(mw, AuthorizationMiddleware):
+                print("here I am again!!!!!")
                 mw.current_user = self.current_user['name']
+                print(f"====={mw.current_user}===========================")
                 mw.auth = self.auth
         return dict(
             params,

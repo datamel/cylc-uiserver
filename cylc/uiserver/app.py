@@ -351,6 +351,9 @@ class CylcUIServer(ExtensionApp):
             auth=self.authobj
         )
 
+        import mdb
+        mdb.debug(ui_server=True)
+
         ioloop.IOLoop.current().add_callback(
             self.workflows_mgr.update
         )
@@ -438,8 +441,8 @@ class CylcUIServer(ExtensionApp):
 
     @classmethod
     def launch_instance(cls, argv=None, **kwargs):
-        import mdb
-        mdb.debug(ui_server=True)
+        # import mdb
+        # mdb.debug(ui_server=True)
         if argv is None:
             # jupyter server isn't expecting to be launched by a Cylc command
             # this patches some internal logic
