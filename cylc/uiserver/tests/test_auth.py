@@ -185,7 +185,7 @@ async def _test(jp_fetch, endpoint, code, message, body):
         if body:
             assert body in exc.response.body
     else:
-        # succees cases, test the response
+        # success cases, test the response
         response = await fetch()
         assert code == response.code
         if message:
