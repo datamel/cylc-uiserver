@@ -138,13 +138,15 @@ async def test_unauthenticated(
     'endpoint,code,message,body',
     [
         pytest.param(
+            # should pass through authentication but fail as there is no query
             ('cylc', 'graphql'),
-            403,
-            'authorisation insufficient',
+            400,
+            'Bad Request',
             None,
             id='cylc/graphql',
         ),
         pytest.param(
+            # should pass through authentication but fail as there is no query
             ('cylc', 'subscriptions'),
             400,
             'Bad Request',
