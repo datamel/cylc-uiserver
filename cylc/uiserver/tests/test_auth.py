@@ -100,14 +100,14 @@ async def test_authorised_and_authenticated(
     [
         pytest.param(
             ('cylc', 'graphql'),
-            403,
+            400,
             'Forbidden',
             None,
             id='cylc/graphql',
         ),
         pytest.param(
             ('cylc', 'subscriptions'),
-            403,
+            400, 
             'Forbidden',
             None,
             id='cylc/subscriptions',
@@ -133,7 +133,7 @@ async def test_unauthenticated(
 
 
 @pytest.mark.integration
-@pytest.mark.usefixtures("mock_authentication_yossarian")
+@pytest.mark.usefixtures("mock_authentication_none")
 @pytest.mark.parametrize(
     'endpoint,code,message,body',
     [
@@ -146,8 +146,8 @@ async def test_unauthenticated(
         ),
         pytest.param(
             ('cylc', 'subscriptions'),
-            403,
-            'authorisation insufficient',
+            400,
+            'Bad Request',
             None,
             id='cylc/subscriptions',
         ),
