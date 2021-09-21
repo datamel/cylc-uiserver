@@ -20,7 +20,8 @@ from unittest.mock import patch
 from cylc.uiserver.authorise import (
     Authorization,
     AuthorizationMiddleware,
-    expand_and_process_access_groups
+    expand_and_process_access_groups,
+    parse_group_ids
 )
 
 FAKE_SITE_CONF = {

@@ -241,6 +241,10 @@ def mock_authentication(monkeypatch):
             'cylc.uiserver.handlers.CylcAppHandler.get_current_user',
             lambda x: ret
         )
+        monkeypatch.setattr(
+            'cylc.uiserver.handlers.CylcAppHandler.get_login_url',
+            lambda x: "http://cylc"
+        )
 
     _mock_authentication()
 

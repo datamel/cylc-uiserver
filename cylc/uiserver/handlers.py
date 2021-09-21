@@ -75,7 +75,7 @@ def authorised(fun: Callable) -> Callable:
                 and _authorise(handler, user['name'], '')
             )
         ):
-            raise web.HTTPError(403, reason='authorisation insufficient')
+            raise web.HTTPError(403, reason='authorization insufficient')
         return fun(handler, *args, **kwargs)
     return _inner
 
@@ -125,7 +125,7 @@ def _authorise(
     if username == ME or can_read(handler=handler):
         return True
     else:
-        handler.log.warning(f'Authorisation failed for {username}')
+        handler.log.warning(f'Authorization failed for {username}')
         return False
 
 
@@ -287,15 +287,14 @@ class UIServerGraphQLHandler(CylcAppHandler, TornadoGraphQLHandler):
         super(TornadoGraphQLHandler, self).initialize()
         self.auth = kwargs['auth']
         self.schema = schema
-        current_user = self.get_current_user()
-        current_user = parse_current_user(current_user)
+        self.current_user = parse_current_user(self.get_current_user())['name']
 
         if middleware is not None:
             self.middleware = list(self.instantiate_middleware(middleware))
         # Make authorization info available to auth middleware
         for mw in self.middleware:
             if isinstance(mw, AuthorizationMiddleware):
-                mw.current_user = current_user['name']
+                mw.current_user = self.current_user
                 mw.auth = self.auth
         self.executor = executor
         self.root_value = root_value

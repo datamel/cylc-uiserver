@@ -157,7 +157,7 @@ async def test_unauthenticated(
         pytest.param(
             ('cylc', 'userprofile'),
             403,
-            'authorisation insufficient',
+            'authorization insufficient',
             None,
             id='cylc/userprofile',
         )
