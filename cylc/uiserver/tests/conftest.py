@@ -15,6 +15,7 @@
 """Test code and fixtures."""
 
 import asyncio
+from cylc.uiserver.handlers import UIServerGraphQLHandler
 from getpass import getuser
 import inspect
 import logging
@@ -214,7 +215,14 @@ def mock_authentication(monkeypatch):
         }
         if none:
             ret = None
-
+            monkeypatch.setattr(
+                'cylc.uiserver.handlers.parse_current_user',
+                lambda x: {
+            'kind': 'user',
+            'name': None,
+            'server': 'some_server'
+        }
+            )
             def mock_redirect(*args):
                 # normally tornado would attempt to redirect us to the login
                 # page - for testing purposes we will skip this and raise
