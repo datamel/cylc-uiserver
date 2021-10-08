@@ -313,6 +313,7 @@ class UIServerGraphQLHandler(CylcAppHandler, TornadoGraphQLHandler):
             'graphql_params': self.graphql_params,
             'request': self.request,
             'resolvers': self.resolvers,
+            'current user': self.current_user
         }
         return wider_context
 
@@ -377,5 +378,6 @@ class SubscriptionHandler(CylcAppHandler, websocket.WebSocketHandler):
         wider_context = {
             'request': self.request,
             'resolvers': self.resolvers,
+            'current_user': self.current_user
         }
         return wider_context
