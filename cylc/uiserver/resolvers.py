@@ -365,31 +365,32 @@ class Services:
             while info.context['sub_statuses'].get(op_id) != 'stop':
                 if queue.empty():
                     if buffer:
-                        yield list(buffer)
+                        # yielding (log lines, status (success))
+                        yield (list(buffer), 'SUCCESS')
                         buffer.clear()
                     if proc.returncode not in [None, 0]:
                         (_, stderr) = await proc.communicate()
                         # pass any error onto ui
-                        yield stderr.decode().splitlines(), 'FAILED'
+                        yield (stderr.decode().splitlines(), 'FAILED')
                         break
                     # sleep set at 1, which matches the `tail` default interval
                     await asyncio.sleep(1)
                 else:
                     if line_count > MAX_LINES:
                         yield buffer
-                        yield [
+                        yield ([
                             '\n\n' + ('-' * 80) + '\n',
                             (
                                 'This file has been truncated because'
                                 f' it is over {MAX_LINES} lines long.\n'
                             ),
-                        ]
+                        ], 'FAILED')
                         break
                     line = await queue.get()
                     line_count += 1
                     buffer.append(line)
                     if len(buffer) >= 75:
-                        yield list(buffer)
+                        yield (list(buffer), 'SUCCESS')
                         buffer.clear()
                         await asyncio.sleep(0)
         finally:
@@ -496,15 +497,11 @@ class Resolvers(BaseResolvers):
         task=None,
         file=None
     ):
-        async for ret in Services.cat_log(
+        async for (ret, status) in Services.cat_log(
             workflows[0],
             self.log,
             info,
             task,
             file
         ):
-            status = 'FAILURE' if len(ret) == 2 else 'SUCCESS'
-            yield {
-                'lines': ret,
-                'status': status
-            }
+            yield (ret, status)

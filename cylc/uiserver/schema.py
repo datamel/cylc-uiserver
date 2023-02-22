@@ -277,19 +277,23 @@ class UISSubscriptions(Subscriptions):
         resolvers: 'Resolvers' = (
             info.context.get('resolvers')  # type: ignore[union-attr]
         )
-        async for item in resolvers.subscription_service(
+        async for (lines, status) in resolvers.subscription_service(
             info,
             command,
             parsed_workflows,
             task,
             file
         ):
-            print(item)
-            yield item
+            yield {
+                'lines': lines,
+                'status': status
+            }
 
     class Logs(graphene.ObjectType):
-        lines = graphene.List(graphene.String)
-        status = graphene.String
+        class Meta:
+            description = """Possible returns for the log view subscription."""
+        lines = graphene.Field(graphene.List(graphene.String))
+        status = graphene.Field(graphene.String)
 
     logs = graphene.Field(
         Logs,
